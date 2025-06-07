@@ -6,12 +6,12 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
 fi
 
 if [ -z "$OMT" ]; then
-    printf "\033[31m%s\033[0m\n" "OH_MY_TERMINAL PATH NOT FOUND"
+    printf "\033[31m%s\033[0m\n" "OMT NOT FOUND"
     return
 fi
 
 
-source "${OMT}/_load.sh"
+# source "${OMT}/load/_load_ssh_agent.sh"
 
 #load rc.d and function.d files
 for rcfile in "${OMT}/function.d"/* "${OMT}/rc.d"/*; do
