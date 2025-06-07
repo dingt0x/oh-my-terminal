@@ -1,0 +1,25 @@
+# shellcheck disable=SC2148
+#------------------ ALIAS ---------------------#
+
+
+if [ -f "${ZSH_CONF}/scripts/list.sh" ]; then
+  for cmd in $("${ZSH_CONF}/scripts/list.sh");do
+    eval "alias ${cmd}=${ZSH_CONF}/scripts/${cmd//-/_}.sh"
+  done
+fi
+
+
+if [ -d "${HOME}/tmp" ]; then
+  alias tmp="cd ${HOME}/tmp"
+fi
+
+if command trash > /dev/null 2>&1; then
+  alias rm='trash -vF'
+fi
+
+alias lt='lsof -n -P -i TCP -s TCP:LISTEN'
+
+alias v=vagrant
+
+
+

@@ -1,0 +1,36 @@
+export KUBECONFIG="${HOME}/.kube/config"
+
+
+if [ -d $HOME/.krew/bin ];then
+  export PATH="$HOME/.krew/bin:$PATH"
+fi
+
+[ -f ${HOME}/.helmrc ]  && source ${HOME}/.helmrc
+
+alias k='kubectl'
+alias kcm='kubecm'
+alias kcmls='kubecm ls'
+alias kcmns='kubecm ns'
+alias kcmt='kubecm switch'
+#alias kk='kubectl krew'
+alias kct='kubectl-ctx'
+alias kns='kubectl-ns'
+alias kcf='kubectl-cf'
+alias kk='kubectl kustomize'
+alias kaf='kubectl apply -f'
+alias kak='kubectl apply -k'
+alias kz='kustomize'
+alias kc='kubectl calico'
+alias ks='kubectl -n kube-system'
+alias krew='kubectl-krew'
+
+if test "${commands[kubectl]}"; then
+  shell_name="$(basename $SHELL)"
+  if [ "$shell_name" = "zsh" ]; then
+    source <(kubectl completion zsh)
+  fi
+  if [ "$shell_name" = "bash" ]; then
+    source  <(kubectl completion bash)
+    complete -o default -F __start_kubectl k
+  fi
+fi

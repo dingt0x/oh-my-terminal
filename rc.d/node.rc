@@ -1,0 +1,16 @@
+# NVM
+# install from souce code
+
+export NVM_DIR="$HOME/.nvm"
+
+function enable-nvm(){
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  || echo "$NVM_DIR/nvm.sh does not exist" # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || echo "$NVM_DIR/bash_completion does not exist" # This loads nvm bash_completion
+    # export NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node
+}
+
+if [ "$ENABLE_NVM" = "true" ]; then
+    enable-nvm
+fi
+
+
