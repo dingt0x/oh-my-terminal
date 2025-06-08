@@ -105,6 +105,6 @@ g.env(){
 
 
 if [ -n "$GO_VERSION" ]; then
-    g.env "$GO_VERSION"
+    g.env "$GO_VERSION" > /dev/null
 fi
 

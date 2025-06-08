@@ -36,6 +36,10 @@ SSH_CONNECTION=${SSH_CONNECTION:-""}
 INTELLIJ_ENVIRONMENT_READER=${INTELLIJ_ENVIRONMENT_READER:-""}
 SSH_AUTH_SOCK=${SSH_AUTH_SOCK:-""}
 
+if [ -n "$SSH_CONNECTION" ]; then
+    echo "Connection from ${SSH_CONNECTION%% *}"
+    exit
+fi
 
 if [ ! -S "$SSH_AUTH_SOCK" ]; then
     echo "ssh-agent NOT found"
