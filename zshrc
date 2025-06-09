@@ -1,8 +1,7 @@
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_CUSTOM="${HOME}/.oh-my-zsh/custom"
-export ZSH_THEME=${ZSH_THEME:-robbyrussell}
+export ZSH_THEME=robbyrussell
 
-export CC_FP=pa99word
 export PROXY_IP="127.0.0.1"
 export GO_VERSION=1.20.14
 export GO111MODULE=auto
@@ -24,5 +23,6 @@ else
     source "$ZSH/oh-my-zsh.sh"
 fi
 
+PATH="${HOME}/.local/bin:${PATH}"
 
 [ -f "${OMT}/load.sh" ] && source "${OMT}/load.sh"
