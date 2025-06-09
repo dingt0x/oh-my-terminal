@@ -23,6 +23,5 @@ else
     source "$ZSH/oh-my-zsh.sh"
 fi
 
-PATH="${HOME}/.local/bin:${PATH}"
 
 [ -f "${OMT}/load.sh" ] && source "${OMT}/load.sh"

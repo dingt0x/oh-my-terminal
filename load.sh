@@ -11,7 +11,26 @@ if [ -z "$OMT" ]; then
 fi
 
 
-# source "${OMT}/load/_load_ssh_agent.sh"
+load_files="
+${OMT}/load/_load_path.sh
+"
+
+
+echo "$load_files" | while read -r load_file; do
+    if [ "${load_file:0:1}" = "" ] || [ "${load_file:0:1}" = "#" ]; then
+         continue
+    fi
+
+    if [ -f "$load_file" ] && [ -s "$load_file" ]; then
+        # shellcheck source=/dev/null
+        source "$load_file"
+
+
+    fi
+done
+unset load_file
+unset load_files
+
 
 #load rc.d and function.d files
 for rcfile in "${OMT}/function.d"/* "${OMT}/rc.d"/*; do
@@ -21,6 +40,7 @@ for rcfile in "${OMT}/function.d"/* "${OMT}/rc.d"/*; do
       . "${rcfile}"
     fi
 done
+unset rcfile
 
 
 for entry_file in "${OMT}/entry"/*; do
@@ -28,4 +48,4 @@ for entry_file in "${OMT}/entry"/*; do
        sh "${entry_file}"
     fi
 done
-
+unset entry_file
