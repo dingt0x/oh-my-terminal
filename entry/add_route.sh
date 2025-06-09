@@ -9,8 +9,6 @@ add_route(){
     echo "$ROUTE" | while read -r route_items; do
         dest=${route_items%%,*}
         gw=${route_items##*,}
-        echo "dest $dest" 
-        echo "gw $gw" 
         # Ignore empty lines or comments
         if [ "${dest:0:1}" = "" ] || [ "${dest:0:1}" = "#" ]; then
             continue
