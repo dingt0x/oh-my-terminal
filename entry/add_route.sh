@@ -17,7 +17,7 @@ add_route(){
           continue
         fi
 
-        if ! (ip addr |grep "${gw%.*}" > /dev/null 2>&1); then
+        if (ip addr |grep "${gw%.*}" > /dev/null 2>&1); then
             continue
         fi
 
