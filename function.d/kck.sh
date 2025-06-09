@@ -65,8 +65,10 @@ _kck_get_current_name() {
     fi
     
     # 如果是符号链接，获取链接目标的文件名
+
     if [ -L "$kubeconfig" ]; then
-        local target=$(readlink "$kubeconfig")
+        local target
+        target=$(readlink "$kubeconfig")
         basename "$target" .kubeconfig
     else
         # 如果是普通文件，返回文件名
@@ -91,20 +93,22 @@ _kck_get_config_link_name() {
 _kck_get_max_name_length() {
     local kube_dir="$1"
     local max_length=0
+    local name
+    local length
     
     # 查找所有 kubeconfig 文件
     for file in "$kube_dir"/*.kubeconfig "$kube_dir"/config; do
         [ -f "$file" ] || continue
-        
-        local name=$(basename "$file" .kubeconfig)
-        local length=${#name}
+
+        name="$(basename "$file" .kubeconfig)"
+        length="${#name}"
         
         if (( length > max_length )); then
             max_length=$length
         fi
     done
     
-    echo $max_length
+    echo "$max_length"
 }
 
 # 列出所有可用的 kubeconfig 文件
