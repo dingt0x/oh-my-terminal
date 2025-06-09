@@ -45,7 +45,7 @@ unset rcfile
 
 for entry_file in "${OMT}/entry"/*; do
     if [ "${entry_file: -3}" = ".sh" ] && [ -s "$entry_file" ]  ; then
-       sh "${entry_file}"
+       bash "${entry_file}"
     fi
 done
 unset entry_file

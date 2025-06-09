@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function _echo_info(){
+_echo_info(){
     local m=${1:-""}
   echo -e "\033[0;31m _____  _     _            _
 |_   _|| |   (_)          | |
@@ -11,7 +11,7 @@ function _echo_info(){
 }
 
 
-function ssh_add() {
+ssh_add() {
     T_OUT="/dev/null"
     if [ "$T_DEBUG" = "true" ]; then
         T_OUT="/dev/stdout"
