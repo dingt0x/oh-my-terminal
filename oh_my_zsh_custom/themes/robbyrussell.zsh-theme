@@ -1,0 +1,23 @@
+#PROMPT=$'%{$fg[cyan]%}%B%~%b%{$reset_color%} $(git_prompt_info) \n'
+local hostname > /dev/null 2>&1
+local local_ip > /dev/null 2>&1
+if [[ -n "$SSH_CONNECTION" ]]; then
+  local_ip=$(echo ${SSH_CONNECTION} | awk '{print $3}')
+  hostname="%{$fg_bold[red]%}($local_ip) " 
+else
+  hostname=""
+fi
+local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ %s)"
+#PROMPT=$'${hostname}%{$fg[yellow]%}%n%{$reset_color%} 🐸 %{$fg[cyan]%}%B%~%b%{$reset_color%} $(git_prompt_info)\n'
+PROMPT=$'${hostname} %{$fg[cyan]%}%B%~%b%{$reset_color%} $(git_prompt_info)\n'
+PROMPT+="%(?:%{$fg_bold[green]%}\$ %{$reset_color%}:%{$fg_bold[red]%}➜ %{$reset_color%})"
+
+#PROMPT+="%(?:%{$fg_bold[green]%}➜ %{$reset_color%}:%{$fg_bold[red]%}➜ %{$reset_color%})"
+
+# ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}git:(%{$fg[red]%}"
+# ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}git:(%{$fg[green]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[red]%}🔞📌"
+# ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[red]%}☄️"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
