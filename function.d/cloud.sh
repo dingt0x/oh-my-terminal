@@ -12,14 +12,23 @@ dtw.aliyun.login(){(
         exit
     fi
 
-    eval "$(keepassxc-cli show "$kp_db" -s "$entry" -a Notes)"
 
-    response=$(aliyun  --region "${ALICLOUD_REGION}" \
+    env="$(keepassxc-cli show "$kp_db" -s "$entry" -a Notes)"
+
+    if [ -z "$env" ];then
+        echo "Error getting environment from secret."
+        exit 1
+    fi
+
+    if ! response=$(aliyun  --region "${ALICLOUD_REGION}" \
     --access-key-id "${ACCESS_KEY_ID}" \
     --access-key-secret "${ACCESS_KEY_SECRET}" \
     sts AssumeRole --RoleArn "${ROLE_ARN}" \
     --RoleSessionName "${ROLE_SESSION_NAME}" \
-    --DurationSeconds "${DURATION_SECONDS}")
+    --DurationSeconds "${DURATION_SECONDS}"); then
+        echo "Error in AssumeRole"
+        exit 1
+    fi
 
     TEMP_ACCESS_KEY_ID=$(echo "$response" | jq -r '.Credentials.AccessKeyId')
     TEMP_ACCESS_KEY_SECRET=$(echo "$response" | jq -r '.Credentials.AccessKeySecret')
@@ -37,6 +46,7 @@ dtw.aliyun.login(){(
 
     if [ -n "${res}" ]; then
         echo "$res"
+        exit 1
     else
         echo "Profile $PROFILE_NAME configured successfully."
     fi
