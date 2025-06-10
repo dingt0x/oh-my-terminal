@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 ### kck - Kubernetes 配置管理工具
 ###
 ### 用法:
