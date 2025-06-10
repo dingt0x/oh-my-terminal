@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 dtw.aliyun.login(){(
+    set -eu
     kp_db="secret.kdbx"
     entry="ak"
 
