@@ -88,3 +88,14 @@ curl -L https://iterm2.com/shell_integration/zsh -o ${HOME}/.iterm2_shell_integr
 # install 
 curl -s https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh 
 ```
+
+### keepassxc
+
+```bash
+# https://keepassxc.org/download/
+for Ubuntu
+sudo apt install keepassxc
+# for MacOS
+brew install --cask keepassxc
+
+```

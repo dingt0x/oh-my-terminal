@@ -20,7 +20,10 @@ dtw.aliyun.login(){(
         exit 1
     fi
 
-    if ! response=$(aliyun  --region "${ALICLOUD_REGION}" \
+    eval "$env"
+
+    if ! response=$(aliyun  \
+    --region "${ALICLOUD_REGION}" \
     --access-key-id "${ACCESS_KEY_ID}" \
     --access-key-secret "${ACCESS_KEY_SECRET}" \
     sts AssumeRole --RoleArn "${ROLE_ARN}" \
