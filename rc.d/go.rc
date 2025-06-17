@@ -103,6 +103,33 @@ g.env(){
     g use "$SET_GO_VERSION"
 }
 
+go_mod_versions() {
+
+	# Example Command:
+	# go list -m -versions gorm.io/driver/sqlite
+	# go list -m -versions gorm.io/driver/mysql
+	# go mod download -json gorm.io/driver/mysql@v0.1.0
+	#
+	local GO111MODULE="on"
+	local module
+	module="$1"
+	if [ -z "$module" ] || [ "${module:0:1}" = "-" ]; then
+		echo "Usage: $0 <module>"
+        echo "Example: $0 gorm.io/driver/mysql"
+		return 1
+	fi
+
+	echo "$module"
+	for version in $(go list -m -versions "$module" | cut -d' ' -f2-); do
+		echo -n "$version: "
+		go mod download -json "$module@$version" |
+			jq -r '.GoMod' |
+			xargs cat |
+			grep --color=never '^go ' ||
+			echo "None"
+	done
+}
+
 
 if [ -n "$GO_VERSION" ]; then
     g.env "$GO_VERSION" > /dev/null
