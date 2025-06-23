@@ -1,11 +1,16 @@
 # NVM
 # install from souce code
 
-export PATH="/usr/local/opt/node@22/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 
+# export PATH="/usr/local/opt/node@22/bin:$PATH"
+cat << 'EOF' > /dev/null
+export LDFLAGS="-L/usr/local/opt/node@22/lib"
+export CPPFLAGS="-I/usr/local/opt/node@22/include"
+EOF
+
 function enable-nvm(){
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  || echo "$NVM_DIR/nvm.sh does not exist" # This loads nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  || echo "$NVM_DIR/nvm.sh does not exist" # This loads nvm
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || echo "$NVM_DIR/bash_completion does not exist" # This loads nvm bash_completion
     # export NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node
 }
