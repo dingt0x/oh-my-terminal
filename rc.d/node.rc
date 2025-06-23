@@ -1,6 +1,7 @@
 # NVM
 # install from souce code
 
+export PATH="/usr/local/opt/node@22/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 
 function enable-nvm(){
