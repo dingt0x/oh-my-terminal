@@ -9,6 +9,7 @@ export LDFLAGS="-L/usr/local/opt/node@22/lib"
 export CPPFLAGS="-I/usr/local/opt/node@22/include"
 EOF
 
+# TODO LAZY LOAD
 function enable-nvm(){
     [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  || echo "$NVM_DIR/nvm.sh does not exist" # This loads nvm
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" || echo "$NVM_DIR/bash_completion does not exist" # This loads nvm bash_completion
@@ -20,3 +21,8 @@ if [ "$ENABLE_NVM" = "true" ]; then
 fi
 
 
+# TODO node version manage
+# tj/n
+# 思路，借助tj/n, 下载node包， 使用PATH的方式管理执行路径，参考go.env
+# 写个 n.env
+# 或者类似 conda activate 、 conda deactivate
