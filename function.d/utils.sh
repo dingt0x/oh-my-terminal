@@ -98,3 +98,29 @@ cd1(){
     fi
     return 1
 }
+
+cd2(){
+    local project_dir
+    project_dir=$(_get_project_dir)
+    if [ -z "$project_dir" ]; then
+        echo "Not in git repo."
+        return 1
+    fi
+
+    parent_project_dir="$(dirname ${project_dir})"
+
+    local real_project_dir
+    if [ -d "${parent_project_dir}/.idea" ]; then
+        real_project_dir="$parent_project_dir"
+    else
+        real_project_dir=${project_dir}
+    fi
+
+    target="$(find "${real_project_dir}" -mindepth 1 -maxdepth 1 -type d  ! -name '.*'  |sort | head -3 | tail -1)"
+    if [ -n "$target" ] && [ -d "${target}/.idea" ] || [ -d "${target}/.git" ] ; then
+        cd $target || return 1
+    else
+        echo "Project not found"
+    fi
+    return 1
+}

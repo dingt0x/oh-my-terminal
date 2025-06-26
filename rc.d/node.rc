@@ -98,5 +98,5 @@ _n_cmd(){
 }
 
 if [ -n "$NODE_VERSION" ]; then
-    n.env "$NODE_VERSION"
+    n.env "$NODE_VERSION" > /dev/null 2>&1
 fi
