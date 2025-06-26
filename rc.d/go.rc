@@ -66,7 +66,7 @@ g.env(){
         mkdir -p  "${SET_GOPATH%%:*}"
     fi
 
-    export PATH="$set_go_path_path:$set_go_root_path:$PATH}"
+    export PATH="$set_go_path_path:$set_go_root_path:$PATH"
     export GOROOT="$SET_GOROOT"
     export GOPATH="$SET_GOPATH"
     export GO_VERSION="${set_go_version}"
