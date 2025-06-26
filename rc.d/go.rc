@@ -21,7 +21,50 @@ export GO_ENVS="${HOME}/goenvs"
 if [ ! -d "$GO_ENVS" ]; then
     mkdir "$GO_ENVS"
 fi
+g.env(){
+    local set_go_version; set_go_version=${1:-""}
+     if ! echo "$set_go_version" |grep -qE '^[0-9]{1,2}\.[0-9]{1,2}'; then
+         _g_cmd "$@"
+         return
+     fi
+    local SET_GOROOT="${GO_HOME}/$set_go_version"
+    local SET_GOPATH="${GO_ENVS}/${set_go_version}:${HOME}/go"
 
+    if [ ! -d "$SET_GOROOT" ]; then
+        echo "${SET_GOROOT} not found"
+        return
+    fi
+
+
+    if [ -n "${GOROOT}" ]; then
+        local go_root_path="${GOROOT}/bin"
+        PATH=$(echo "$PATH"|/usr/bin/sed -E -e "s#(^|:)${go_root_path}(:|$)#\1\2#g" -e 's/::/:/g' -e 's/^://' -e 's/:$//')
+    fi
+
+
+    if [ -n "${GOPATH}" ]; then
+        local go_path_path="${GOPATH%%:*}/bin"
+        PATH=$(echo "$PATH"|/usr/bin/sed -E -e "s#(^|:)${go_path_path}(:|$)#\1\2#g" -e 's/::/:/g' -e 's/^://' -e 's/:$//')
+        PATH=$(echo "$PATH"|/usr/bin/sed -E -e "s#(^|:)${HOME}/go/bin(:|$)#\1\2#g" -e 's/::/:/g' -e 's/^://' -e 's/:$//')
+
+        PATH="${SET_GOPATH%%:*}/bin:${HOME}/go/bin:$PATH"
+    fi
+
+
+    set_go_root_path="${SET_GOROOT}/bin"
+    set_go_path_path="${SET_GOPATH%%:*}/bin:${HOME}/go/bin"
+
+    if [ ! -d "${SET_GOPATH%%:*}" ]; then
+        mkdir -p  "${SET_GOPATH%%:*}"
+    fi
+
+    export PATH="$set_go_path_path:$set_go_root_path:$PATH}"
+    export GOROOT="$SET_GOROOT"
+    export GOPATH="$SET_GOPATH"
+    export GO_VERSION="${set_go_version}"
+
+    g use "$set_go_version"
+}
 
 
 _create_go_version_file(){
@@ -56,23 +99,9 @@ _create_go_version_file(){
 
     chmod +x "$GO_BIN_FILE"
 }
-
-_update_go() {
-    local GO_VERSION_PATH="$HOME/.g/versions"
-    local go_version
-
-    for i in "$GO_VERSION_PATH"/*; do
-        if [ ! -d "$i" ]; then
-            continue
-        fi
-        go_version=$(basename "$i")
-        _create_go_version_file "${go_version}"
-    done
-}
-
-g.env(){
-    local SET_GO_VERSION; SET_GO_VERSION=$1
-    case "$SET_GO_VERSION" in
+_g_cmd(){
+    local set_go_version; set_go_version=$1
+    case "$set_go_version" in
         "i"|"install")
             shift
             for arg in "$@"; do
@@ -105,34 +134,21 @@ g.env(){
             ;;
     esac
 
-    local SET_GOROOT="${GO_HOME}/$SET_GO_VERSION"
-    local SET_GOPATH="${GO_ENVS}/${SET_GO_VERSION}:${HOME}/go"
-
-    if [ ! -d "$SET_GOROOT" ]; then
-        echo "${SET_GOROOT} not found"
-        return
-    fi
-
-
-    if [ -n "${GOROOT}" ]; then
-        PATH=$(echo $PATH | /usr/bin/sed 's#'${GOROOT}'/bin#'${SET_GOROOT}'/bin#')
-    else
-        PATH="${SET_GOROOT}/bin:$PATH"
-    fi
-
-    if [ -n "${GOPATH}" ]; then
-        PATH=$(echo $PATH | /usr/bin/sed 's#'${GOPATH%%:*}'/bin#'${SET_GOPATH%%:*}'/bin#')
-    else
-        PATH="${SET_GOPATH%%:*}/bin:${HOME}/go/bin:$PATH"
-    fi
-    if [ ! -d "${SET_GOPATH%%:*}" ]; then
-        mkdir -p  "${SET_GOPATH%%:*}"
-    fi
-
-    export GOROOT="$SET_GOROOT"
-    export GOPATH="$SET_GOPATH"
-    g use "$SET_GO_VERSION"
 }
+_update_go() {
+    local GO_VERSION_PATH="$HOME/.g/versions"
+    local go_version
+
+    for i in "$GO_VERSION_PATH"/*; do
+        if [ ! -d "$i" ]; then
+            continue
+        fi
+        go_version=$(basename "$i")
+        _create_go_version_file "${go_version}"
+    done
+}
+
+
 
 go_mod_versions() {
 	# Example Command:

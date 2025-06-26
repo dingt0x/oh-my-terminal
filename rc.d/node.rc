@@ -26,3 +26,53 @@ fi
 # 思路，借助tj/n, 下载node包， 使用PATH的方式管理执行路径，参考go.env
 # 写个 n.env
 # 或者类似 conda activate 、 conda deactivate
+export N_PREFIX="${HOME}/.n"
+
+if [ ! -d "${N_PREFIX}" ]; then
+    mkdir "${N_PREFIX}"
+fi
+
+
+
+n.env(){
+    local node_version_dir
+    local set_node_version
+    local set_node_path
+
+    node_version_dir="${N_PREFIX}/n/versions/node"
+
+    set_node_version=${1:-""}
+    set_node_path="${node_version_dir}/${set_node_version}/bin"
+
+     if ! echo "$set_node_version" |grep -qE '^[0-9]{1,2}\.[0-9]{1,2}'; then
+         _n_cmd "$@"
+         return
+     fi
+
+    if ! [ -d "${set_node_path}" ]; then
+        echo "NODE Version ${set_node_version} not found in ${node_version_dir}."
+        return 1
+    fi
+
+    if [ -n "$NODE_PATH" ]; then
+       PATH=$(echo "$PATH"|/usr/bin/sed -E -e "s#(^|:)${NODE_PATH}(:|$)#\1\2#g" -e 's/::/:/g' -e 's/^://' -e 's/:$//')
+    fi
+
+    export PATH="${set_node_path}:${PATH}"
+    export NODE_PATH="${set_node_path}"
+    export NODE_VERSION="${set_node_version}"
+}
+
+_n_cmd(){
+    local set_node_version; set_node_version=$1
+    case "$set_node_version" in
+        "ls"|"lsr")
+            n $set_node_version
+            return
+            ;;
+        "--help"|"-h"|"--version"|"-v")
+            return
+            ;;
+    esac
+
+}
