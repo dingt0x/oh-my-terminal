@@ -21,11 +21,7 @@ if [ "$ENABLE_NVM" = "true" ]; then
 fi
 
 
-# TODO node version manage
 # tj/n
-# 思路，借助tj/n, 下载node包， 使用PATH的方式管理执行路径，参考go.env
-# 写个 n.env
-# 或者类似 conda activate 、 conda deactivate
 export N_PREFIX="${HOME}/.n"
 
 if [ ! -d "${N_PREFIX}" ]; then
@@ -67,7 +63,7 @@ _n_cmd(){
     local set_node_version; set_node_version=$1
     case "$set_node_version" in
         "ls"|"lsr")
-            n $set_node_version
+            n "$set_node_version"
             return
             ;;
         "--help"|"-h"|"--version"|"-v")
@@ -76,3 +72,7 @@ _n_cmd(){
     esac
 
 }
+
+if [ -n "$NODE_VERSION" ]; then
+    n.env "$NODE_VERSION"
+fi
