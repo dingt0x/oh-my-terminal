@@ -4,68 +4,99 @@
 # export GOPATH="${HOME}/go"
 # 
 # export PATH="${PATH}:${GOROOT}/bin:${GOPATH}/bin"
+# refer github page to install voidint/g
+# https://github.com/voidint/g
 
-export GOPROXY="https://goproxy.cn,direct"
-# export GOPRIVATE="" #指向私有仓库
-
-unalias g 2> /dev/null || true
-
-if [ -x "${HOME}/.g/bin/g" ]; then
-    export PATH="${HOME}/.g/bin:$PATH"
+if [[ -n $(alias g 2>/dev/null) ]]; then
+unalias g
 fi
 
+export G_PREFIX="${HOME}/.g"
 export G_MIRROR=https://mirrors.aliyun.com/golang/
+export PATH="${G_PREFIX}/bin:$PATH"
+
+export GOPROXY="https://goproxy.cn,direct"
 export GO_HOME="${HOME}/.g/versions"
 export GO_ENVS="${HOME}/goenvs"
-
 if [ ! -d "$GO_ENVS" ]; then
     mkdir "$GO_ENVS"
 fi
 
+
+
+_create_go_version_file(){
+    local go_version
+    go_version="${1:-""}"
+    if [ -z "$go_version" ]; then
+        echo "No Go version is provided."
+        return 1
+    fi
+    local GO_VERSION_PATH="$HOME/.g/versions"
+    local GO_VERSION_BIN_FILE="${GO_VERSION_PATH}/${go_version}/bin/go"
+    local GO_BIN_FILE="$HOME/.g/bin/go${go_version}"
+
+    if [ ! -f "${GO_VERSION_BIN_FILE}" ]; then
+        echo "Go version NOT FOUND in ${GO_VERSION_PATH}."
+        return 1
+    fi
+
+    if [ ! -d "$HOME/goenvs/$go_version" ]; then
+        mkdir -p "$HOME/goenvs/$go_version"
+    fi
+
+    (
+    echo '#/bin/bash'
+    echo "go_version=$go_version"
+    echo "go_version_path=$GO_VERSION_PATH"
+    echo 'export GOROOT="${go_version_path}/${go_version}"'
+    echo 'export GOPATH="${HOME}/goenvs/${go_version}:${HOME}/go"'
+    echo ''
+    echo 'exec "${go_version_path}/${go_version}/bin/go" "$@"'
+    ) > "$GO_BIN_FILE"
+
+    chmod +x "$GO_BIN_FILE"
+}
+
 _update_go() {
     local GO_VERSION_PATH="$HOME/.g/versions"
-    local GO_BIN_PATH="$HOME/.g/bin"
-    local BIN_FILE
     local go_version
 
-    for i in $GO_VERSION_PATH/*; do
+    for i in "$GO_VERSION_PATH"/*; do
         if [ ! -d "$i" ]; then
             continue
         fi
         go_version=$(basename "$i")
-        BIN_FILE="$GO_BIN_PATH/go$go_version"
-        if [ -x "$BIN_FILE" ]; then
-            continue
-        fi
-        if [ ! -d "$HOME/goenvs/$go_version" ]; then
-            mkdir -p "$HOME/goenvs/$go_version"
-        fi
-
-        cat << EOF > "$BIN_FILE"
-#/bin/bash
-go_version=$go_version
-
-export GOPATH="/Users/dingtianwei/goenvs/\${go_version}:/Users/dingtianwei/go"
-export GOROOT="/Users/dingtianwei/.g/versions/\${go_version}"
-export PATH="/Users/dingtianwei/goenvs/\${go_version}/bin:/Users/dingtianwei/go/bin:\${PATH}"
-exec "\${HOME}/.g/versions/\${go_version}/bin/go" "\$@"
-
-EOF
-
-        chmod +x "$BIN_FILE"
+        _create_go_version_file "${go_version}"
     done
-
 }
 
 g.env(){
     local SET_GO_VERSION; SET_GO_VERSION=$1
     case "$SET_GO_VERSION" in
-        "ls"|"l"|"ls-remote"|"lr"|"lsr"|"use"|"install"|"i"|"uninstall"|"clean"|"env"|"self"|"help"|"h")
-            ${HOME}/.g/bin/g "$@"
+        "i"|"install")
+            shift
+            for arg in "$@"; do
+                if ! echo "$arg" |grep -qE '^[0-9]{1,2}\.[0-9]{1,2}'; then
+                    continue
+                fi
+                if ! "${HOME}/.g/bin/g" install -n "$arg"; then
+                    return 1
+                fi
+                _create_go_version_file "$arg"
+                break
+            done
+            return
+            ;;
+        "ls"|"l"|"ls-remote"|"lr"|"lsr"|"uninstall"|"clean"|"env"|"self"|"help"|"h")
+            "${HOME}/.g/bin/g" "$@"
+            return
+            ;;
+        "use"):
+            echo "Do nothing"
             return
             ;;
         "--help"|"-h"|"--version"|"-v")
-            ${HOME}/.g/bin/g "$@"
+            "${HOME}/.g/bin/g" "$@"
             return
             ;;
         "--update")
@@ -104,7 +135,6 @@ g.env(){
 }
 
 go_mod_versions() {
-
 	# Example Command:
 	# go list -m -versions gorm.io/driver/sqlite
 	# go list -m -versions gorm.io/driver/mysql
@@ -134,4 +164,3 @@ go_mod_versions() {
 if [ -n "$GO_VERSION" ]; then
     g.env "$GO_VERSION" > /dev/null
 fi
-
