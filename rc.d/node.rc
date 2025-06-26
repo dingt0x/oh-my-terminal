@@ -3,12 +3,30 @@
 
 export NVM_DIR="$HOME/.nvm"
 
-# export PATH="/usr/local/opt/node@22/bin:$PATH"
 cat << 'EOF' > /dev/null
 export LDFLAGS="-L/usr/local/opt/node@22/lib"
 export CPPFLAGS="-I/usr/local/opt/node@22/include"
 EOF
 
+#_remove_from_path() {
+#    local path_to_remove="${1:-""}"
+#    if [ -z "$path_to_remove" ]; then
+#        return
+#    fi
+#    local path=":$PATH:"
+#    path=${path//":$path_to_remove:"/":"}
+#    path=${path#:}
+#    path=${path%:}
+#    export PATH="$path"
+#}
+
+_remove_from_path(){
+    local path_to_remove="${1:-""}"
+    if [ -z "$path_to_remove" ]; then
+        return
+    fi
+    PATH=$(echo "$PATH"|/usr/bin/sed -E -e "s#(^|:)${path_to_remove}(:|$)#\1\2#g" -e 's/::/:/g' -e 's/^://' -e 's/:$//')
+}
 # TODO LAZY LOAD
 function enable-nvm(){
     [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  || echo "$NVM_DIR/nvm.sh does not exist" # This loads nvm
@@ -31,13 +49,18 @@ fi
 
 
 n.env(){
+    if [ "${#}" -eq "0" ]; then
+        echo "Usage: n.env [version]"
+        return
+    fi
+
     local node_version_dir
     local set_node_version
     local set_node_path
 
     node_version_dir="${N_PREFIX}/n/versions/node"
+    set_node_version=${1}
 
-    set_node_version=${1:-""}
     set_node_path="${node_version_dir}/${set_node_version}/bin"
 
      if ! echo "$set_node_version" |grep -qE '^[0-9]{1,2}\.[0-9]{1,2}'; then
@@ -51,7 +74,8 @@ n.env(){
     fi
 
     if [ -n "$NODE_PATH" ]; then
-       PATH=$(echo "$PATH"|/usr/bin/sed -E -e "s#(^|:)${NODE_PATH}(:|$)#\1\2#g" -e 's/::/:/g' -e 's/^://' -e 's/:$//')
+        echo "$NODE_PATH"
+        _remove_from_path "$NODE_PATH"
     fi
 
     export PATH="${set_node_path}:${PATH}"

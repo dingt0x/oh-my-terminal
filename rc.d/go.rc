@@ -7,6 +7,15 @@
 # refer github page to install voidint/g
 # https://github.com/voidint/g
 
+# TODO 解耦PATH
+_go_remove_from_path(){
+    local path_to_remove="${1:-""}"
+    if [ -z "$path_to_remove" ]; then
+        return
+    fi
+    PATH=$(echo "$PATH"|/usr/bin/sed -E -e "s#(^|:)${path_to_remove}(:|$)#\1\2#g" -e 's/::/:/g' -e 's/^://' -e 's/:$//')
+}
+
 if [[ -n $(alias g 2>/dev/null) ]]; then
 unalias g
 fi
@@ -38,19 +47,18 @@ g.env(){
 
     if [ -n "${GOROOT}" ]; then
         local go_root_path="${GOROOT}/bin"
-        PATH=$(echo "$PATH"|/usr/bin/sed -E -e "s#(^|:)${go_root_path}(:|$)#\1\2#g" -e 's/::/:/g' -e 's/^://' -e 's/:$//')
+        _go_remove_from_path "$go_root_path"
+
     fi
 
 
     if [ -n "${GOPATH}" ]; then
         local go_path_path="${GOPATH%%:*}/bin"
-        PATH=$(echo "$PATH"|/usr/bin/sed -E -e "s#(^|:)${go_path_path}(:|$)#\1\2#g" -e 's/::/:/g' -e 's/^://' -e 's/:$//')
-        PATH=$(echo "$PATH"|/usr/bin/sed -E -e "s#(^|:)${HOME}/go/bin(:|$)#\1\2#g" -e 's/::/:/g' -e 's/^://' -e 's/:$//')
-
-        PATH="${SET_GOPATH%%:*}/bin:${HOME}/go/bin:$PATH"
+        _go_remove_from_path "${go_path_path}"
+        _go_remove_from_path "${HOME}/go/bin"
     fi
 
-
+    PATH="${SET_GOPATH%%:*}/bin:${HOME}/go/bin:$PATH"
     set_go_root_path="${SET_GOROOT}/bin"
     set_go_path_path="${SET_GOPATH%%:*}/bin:${HOME}/go/bin"
 
