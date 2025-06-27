@@ -1,4 +1,5 @@
 #!/bin/bash
+
 ### kck - Kubernetes 配置管理工具
 ###
 ### 用法:
@@ -79,9 +80,10 @@ _kck_get_current_name() {
 # 获取 config 软链接指向的配置名称
 _kck_get_config_link_name() {
     local kubeconfig_default="${HOME}/.kube/config"
-    
+    local target
+
     if [ -L "$kubeconfig_default" ]; then
-        local target=$(readlink "$kubeconfig_default")
+        target="$(readlink "$kubeconfig_default")"
         basename "$target" .kubeconfig
     else
         # 如果不是软链接，返回空
@@ -129,17 +131,19 @@ _kck_list() {
     fi
     
     # 获取 config 软链接指向的配置名称
-    local config_link_name=$(_kck_get_config_link_name)
-    
+    local config_link_name
+    config_link_name=$(_kck_get_config_link_name)
+
     # 获取最长名称长度用于格式化
-    local max_length=$(_kck_get_max_name_length "$kube_dir")
-    
+    local max_length
+    max_length=$(_kck_get_max_name_length "$kube_dir")
+
     # 收集所有配置文件
     local configs=()
     
     # 添加 .kubeconfig 文件
     for file in "$kube_dir"/*.kubeconfig; do
-        [ -f "$file" ] && configs+=($(basename "$file"))
+        [ -f "$file" ] && configs+=("$(basename "$file")")
     done
     
     # 如果 config 文件存在且不是符号链接，也添加进来
@@ -158,9 +162,12 @@ _kck_list() {
     echo
     
     for config in "${configs[@]}"; do
-        local name=$(basename "$config" .kubeconfig)
-        local formatted_name=$(printf "%-${max_length}s" "$name")
-        local file_path="${kube_dir}/${config}"
+        local name
+        local formatted_name
+        local file_path
+        name=$(basename "$config" .kubeconfig)
+        formatted_name=$(printf "%-${max_length}s" "$name")
+        file_path="${kube_dir}/${config}"
         
         # 判断前缀和后缀
         local prefix="  "
@@ -222,7 +229,7 @@ _kck_switch() {
     # 查找目标配置文件
     local target_file=""
     
-    if [ "$target_name" = "config" ] &&  [-f "${kube_dir}/config.kubeconfig" ]; then
+    if [ "$target_name" = "config" ] &&  [ -f "${kube_dir}/config.kubeconfig" ]; then
         target_file="${kube_dir}/config.kubeconfig"
     elif [ -f "${kube_dir}/${target_name}.kubeconfig" ]; then
         target_file="${kube_dir}/${target_name}.kubeconfig"
@@ -267,7 +274,8 @@ _kck_current() {
     # 获取配置名称
     local name
     if [ -L "$kubeconfig" ]; then
-        local target=$(readlink "$kubeconfig")
+        local target
+        target=$(readlink "$kubeconfig")
         name=$(basename "$target" .kubeconfig)
     else
         name=$(basename "$kubeconfig" .kubeconfig)
