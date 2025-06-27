@@ -24,13 +24,13 @@ PROMPT+="%(?:%{$fg_bold[green]%}\$ %{$reset_color%}:%{$fg_bold[red]%}➜ %{$rese
 
 
 # Git prompt settings
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}git:(%{$fg[green]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}✚ "
-ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%}⚑ "
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✖ "
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%}▴ "
-ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[cyan]%}§ "
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[white]%}◒ "
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[red]%}✗%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%}) %{$fg[green]%}✔%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[blue]%})%{$fg[green]%}✚ "
+ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%})%{$fg[yellow]%}⚑ "
+ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[blue]%})%{$fg[red]%}✖ "
+ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%})%{$fg[blue]%}▴ "
+ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[blue]%})%{$fg[cyan]%}§ "
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[blue]%})%{$fg[white]%}◒ "
