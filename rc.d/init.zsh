@@ -5,16 +5,15 @@ PATH="${HOME}/.local/bin:${PATH}"
 
 DINGT0X_SCRIPT_D="${OMT}/script.d"
 if [ -d "$DINGT0X_SCRIPT_D" ]; then
-    for dingt0x_script in $(find "$DINGT0X_SCRIPT_D" -type f -name '*.sh');do
-        filename_with_ext=$(basename "$dingt0x_script")  # => "example.txt"
-        filename_without_ext="${filename_with_ext%.*}"
-        eval "alias ${filename_without_ext}=${dingt0x_script}"
+    for script_file in $(find "$DINGT0X_SCRIPT_D" -type f -name '*.sh');do
+#        filename_with_ext=$(basename "$dingt0x_script")  # => "example.txt"
+#        filename_without_ext="${filename_with_ext%.*}"
+        eval "alias ${script_file:t:r}=${script_file}"
     done
 fi
 
 unset DINGT0X_SCRIPT_D
-unset filename_with_ext
-unset filename_without_ext
+unset script_file
 
 
 alias tmp="cd ${HOME}/tmp"
