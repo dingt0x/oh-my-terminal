@@ -14,8 +14,6 @@ fi
 load_files="
 ${OMT}/load/_load_path.sh
 "
-
-
 echo "$load_files" | while read -r load_file; do
     if [ "${load_file:0:1}" = "" ] || [ "${load_file:0:1}" = "#" ]; then
          continue
@@ -24,8 +22,6 @@ echo "$load_files" | while read -r load_file; do
     if [ -f "$load_file" ] && [ -s "$load_file" ]; then
         # shellcheck source=/dev/null
         source "$load_file"
-
-
     fi
 done
 unset load_file

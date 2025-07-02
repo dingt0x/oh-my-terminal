@@ -1,21 +1,15 @@
 export KUBECONFIG="${HOME}/.kube/config"
 
 
-if [ -d $HOME/.krew/bin ];then
+if [ -d "HOME/.krew/bin" ];then
   export PATH="$HOME/.krew/bin:$PATH"
 fi
 
-[ -f ${HOME}/.helmrc ]  && source ${HOME}/.helmrc
+[ -f "${HOME}/.helmrc" ]  && source "${HOME}/.helmrc"
 
 alias k='kubectl'
-alias kcm='kubecm'
-alias kcmls='kubecm ls'
-alias kcmns='kubecm ns'
-alias kcmt='kubecm switch'
-#alias kk='kubectl krew'
 alias kct='kubectl-ctx'
 alias kns='kubectl-ns'
-alias kcf='kubectl-cf'
 alias kk='kubectl kustomize'
 alias kaf='kubectl apply -f'
 alias kak='kubectl apply -k'

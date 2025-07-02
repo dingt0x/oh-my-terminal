@@ -7,26 +7,24 @@ function glazy() {
     git push
 }
 
-
-alias g="git"
 alias gs="git status"
 alias ga="git add"
 alias gaa="git add ."
 alias gam="git add . && git commit -a -m  "
 alias gcm="git commit -m "
 alias gsw='git switch'
-alias gswc='git switch -c'
-alias gswm='git switch master 2> /dev/null || git switch main'
+alias gcl="git clone"
 alias gpl="git pull"
 alias gps="git push"
-alias gpsu="git push --set-upstream origin $git_current_branch"
 alias gck="git checkout"
-# alias gl="git log --graph --all --format=format:'%C(bold blue)%h %C(bold green)(%cr) %C(bold white)%cn: %C(bold yellow)%d%C(reset) %C(white)%s%C(reset)' --abbrev-commit --date=relative && echo '\033[2A'"
 alias gl="git log --graph --format=format:'%C(bold blue)%h %C(bold green)(%cr) %C(bold white)%cn: %C(bold yellow)%d%C(reset) %C(white)%s%C(reset)' --abbrev-commit --date=relative && echo '\033[2A'"
 alias gll="git log --graph --all --format=format:'%C(bold blue)%h %C(bold green)(%cr) %C(bold cyan)%cD %C(bold yellow)%d%n''        %C(bold white)%cn:%C(reset) %C(white)%s%C(reset)' --abbrev-commit && echo '\033[2A'"
 
-alias gcl="git clone"
-
+alias g="git"
+#alias gswc='git switch -c'
+#alias gswm='git switch master 2> /dev/null || git switch main'
+#alias gpsu="git push --set-upstream origin $git_current_branch"
+# alias gl="git log --graph --all --format=format:'%C(bold blue)%h %C(bold green)(%cr) %C(bold white)%cn: %C(bold yellow)%d%C(reset) %C(white)%s%C(reset)' --abbrev-commit --date=relative && echo '\033[2A'"
 # alias gama='git am --abort'
 # alias gamc='git am --continue'
 # alias gams='git am --skip'
