@@ -34,7 +34,7 @@ unset load_files
 
 #load rc.d and function.d files
 for rcfile in "${OMT}/lib"/* "${OMT}/function.d"/* "${OMT}/rc.d"/* ; do
-    if { [ "${rcfile: -3}" = ".rc" ] ||  [ "${rcfile: -3}" = ".sh" ]; } \
+    if { [ "${rcfile: -3}" = ".rc" ] ||  [ "${rcfile: -3}" = ".sh" ] || [ "${rcfile: -4}" = ".zsh" ] ; } \
       && [ -s "$rcfile" ]  ; then
       # shellcheck source=/dev/null
       . "${rcfile}"
