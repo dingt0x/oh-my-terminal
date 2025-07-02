@@ -60,8 +60,8 @@ if [[ -n "$ZSH_THEME" ]]; then
     source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
   elif is_theme "$ZSH_CUSTOM/themes" "$ZSH_THEME"; then
     source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
-  elif is_theme "$OMZ/themes" "$ZSH_THEME"; then
-    source "$OMZ/themes/$ZSH_THEME.zsh-theme"
+  elif is_theme "$OMT/themes" "$ZSH_THEME"; then
+    source "$OMT/themes/$ZSH_THEME.zsh-theme"
   else
     echo "[oh-my-zsh] theme '$ZSH_THEME' not found"
   fi
