@@ -27,7 +27,7 @@ is_plugin() {
   local base_dir=$1
   local name=$2
   builtin test -f $base_dir/plugins/$name/$name.plugin.zsh \
-    || builtin test -f $base_dir/plugins/$name/_$name
+    || builtin test -f $base_dir/plugt ins/$name/_$name
 }
 
 for plugin in "${plugins[@]}"; do
@@ -89,7 +89,7 @@ fi
 
 for plugin in "${plugins[@]}"; do
   if is_plugin "$OMT_CUSTOM" "$plugin"; then
-     source "$OMT_CUSTOM/plugins/$plugin/${plugin}.plugin.zsh."
+     source "$OMT_CUSTOM/plugins/$plugin/${plugin}.plugin.zsh"
   elif is_plugin "$OMT" "$plugin"; then
      source "$OMT/plugins/${plugin}/${plugin}.plugin.zsh"
   fi
