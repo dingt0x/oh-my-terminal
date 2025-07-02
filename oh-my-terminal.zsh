@@ -89,9 +89,9 @@ fi
 
 for plugin in "${plugins[@]}"; do
   if is_plugin "$OMT_CUSTOM" "$plugin"; then
-     source "$OMT_CUSTOM/plugins/${plugin}.plugin.zsh."
+     source "$OMT_CUSTOM/plugins/$plugin/${plugin}.plugin.zsh."
   elif is_plugin "$OMT" "$plugin"; then
-     source "$OMT/plugins/${plugin}.plugin.zsh."
+     source "$OMT/plugins/${plugin}/${plugin}.plugin.zsh."
   fi
 done
 unset plugin
