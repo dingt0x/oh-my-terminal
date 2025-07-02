@@ -27,7 +27,7 @@ fi
 setopt PROMPT_SUBST  # 允许在提示符中使用变量和函数
 PROMPT='${dingt0x_hostname}%F{cyan}%~%f $(dingt0x_git_prompt_info)'
 PROMPT+=$'\n'
-PROMPT+='%(?.%F{green}❯%f.%F{red}❯%f) '
+PROMPT+='%(?.%F{green}$%f.%F{red}$%f) '
 
 # 可选：右侧提示显示时间
 # RPROMPT='%F{yellow}%*%f'
