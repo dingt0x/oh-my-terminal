@@ -29,7 +29,7 @@ unset load_files
 
 
 #load rc.d and function.d files
-for rcfile in "${OMT}/lib"/* "${OMT}/function.d"/* "${OMT}/rc.d"/* ; do
+for rcfile in "${OMT}/function.d"/* "${OMT}/rc.d"/* ; do
     if { [ "${rcfile: -3}" = ".rc" ] ||  [ "${rcfile: -3}" = ".sh" ] || [ "${rcfile: -4}" = ".zsh" ] ; } \
       && [ -s "$rcfile" ]  ; then
       # shellcheck source=/dev/null
@@ -39,12 +39,25 @@ done
 unset rcfile
 
 
-for entry_file in "${OMT}/entry"/*; do
-    if [ "${entry_file: -3}" = ".sh" ] && [ -s "$entry_file" ]  ; then
-       bash "${entry_file}"
-    fi
+is_plugin() {
+  local base_dir=$1
+  local name=$2
+  builtin test -f $base_dir/plugins/$name/$name.plugin.zsh \
+    || builtin test -f $base_dir/plugins/$name/_$name
+}
+
+
+
+for plugin in "${plugins[@]}"; do
+  if is_plugin "$ZSH_CUSTOM" "$plugin"; then
+    fpath=("$ZSH_CUSTOM/plugins/$plugin" $fpath)
+  elif is_plugin "$ZSH" "$plugin"; then
+    fpath=("$ZSH/plugins/$plugin" $fpath)
+  else
+    echo "[oh-my-zsh] plugin '$plugin' not found"
+  fi
 done
-unset entry_file
+
 
 
 # Load the theme
@@ -55,6 +68,7 @@ is_theme() {
 }
 
 ZSH_THEME=${ZSH_THEME:-"dingt0xavit"}
+
 if [[ -n "$ZSH_THEME" ]]; then
   if is_theme "$ZSH_CUSTOM" "$ZSH_THEME"; then
     source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
@@ -66,3 +80,12 @@ if [[ -n "$ZSH_THEME" ]]; then
     echo "[oh-my-zsh] theme '$ZSH_THEME' not found"
   fi
 fi
+
+for entry_file in "${OMT}/entry"/*; do
+    if [ "${entry_file: -3}" = ".sh" ] && [ -s "$entry_file" ]  ; then
+       bash "${entry_file}"
+    fi
+done
+
+unset entry_file
+
