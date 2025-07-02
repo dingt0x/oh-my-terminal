@@ -31,10 +31,10 @@ is_plugin() {
 }
 
 for plugin in "${plugins[@]}"; do
-  if is_plugin "$ZSH_CUSTOM" "$plugin"; then
-    fpath=("$ZSH_CUSTOM/plugins/$plugin" $fpath)
-  elif is_plugin "$ZSH" "$plugin"; then
-    fpath=("$ZSH/plugins/$plugin" $fpath)
+  if is_plugin "$OMT_CUSTOM" "$plugin"; then
+    fpath=("$OMT_CUSTOM/plugins/$plugin" $fpath)
+  elif is_plugin "$OMT" "$plugin"; then
+    fpath=("$OMT/plugins/$plugin" $fpath)
   else
     echo "[oh-my-zsh] plugin '$plugin' not found"
   fi
@@ -90,7 +90,7 @@ fi
 for plugin in "${plugins[@]}"; do
   if is_plugin "$OMT_CUSTOM" "$plugin"; then
      source "$OMT_CUSTOM/plugins/${plugin}.plugin.zsh."
-  elif is_plugin "$ZSH" "$plugin"; then
+  elif is_plugin "$OMT" "$plugin"; then
      source "$OMT/plugins/${plugin}.plugin.zsh."
   fi
 done
