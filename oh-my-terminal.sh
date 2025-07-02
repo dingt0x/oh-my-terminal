@@ -45,3 +45,24 @@ for entry_file in "${OMT}/entry"/*; do
     fi
 done
 unset entry_file
+
+
+# Load the theme
+is_theme() {
+  local base_dir=$1
+  local name=$2
+  builtin test -f $base_dir/$name.zsh-theme
+}
+
+ZSH_THEME=${ZSH_THEME:-"dingt0xavit"}
+if [[ -n "$ZSH_THEME" ]]; then
+  if is_theme "$ZSH_CUSTOM" "$ZSH_THEME"; then
+    source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
+  elif is_theme "$ZSH_CUSTOM/themes" "$ZSH_THEME"; then
+    source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
+  elif is_theme "$OMZ/themes" "$ZSH_THEME"; then
+    source "$OMZ/themes/$ZSH_THEME.zsh-theme"
+  else
+    echo "[oh-my-zsh] theme '$ZSH_THEME' not found"
+  fi
+fi
