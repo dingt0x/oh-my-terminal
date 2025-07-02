@@ -35,6 +35,7 @@ compdef _dirs d
 
 # List directory contents
 if ls --color >/dev/null 2>&1; then  # GNU ls
+  alias ls='ls --color=auto'
   alias lsa='ls -lah --color=auto'
   alias l='ls -lah --color=auto'
   alias ll='ls -lh --color=auto'
