@@ -1,6 +1,12 @@
 # oh-my-terminal
 
 
+## Install zsh
+
+
+## Install oh-my-zsh
+
+
 ## 环境组件安装
 
 ### krew 安装
