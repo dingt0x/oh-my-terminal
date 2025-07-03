@@ -23,49 +23,54 @@ install plugin
 ### zsh-autosuggestions
 ```bash
 $(
-# mkdir -p ${HOME}/.zsh/
-# cd  ${HOME}/.zsh/
-cd ~/.oh-my-zsh/custom/plugins/
+zsh_custom="${ZSH_CUSTOM:-~/.oh-my-zsh/custom}"
+cd $zsh_custom/plugins/
 git clone --depth 1 ${gh_proxy}https://github.com/zsh-users/zsh-autosuggestions
+rm -rf ./zsh-autosuggestions/.git/
+
 )
 ```
 
 ### zsh-history-substring-search
 ```bash
 $(
-# mkdir -p ${HOME}/.zsh/
-# cd  ${HOME}/.zsh/
-cd ~/.oh-my-zsh/custom/plugins/
+zsh_custom="${ZSH_CUSTOM:-~/.oh-my-zsh/custom}"
+cd $zsh_custom/plugins/
+
 git clone --depth 1 ${gh_proxy}https://github.com/zsh-users/zsh-history-substring-search
+rm -rf ./zsh-history-substring-search/.git
 )
 ```
 
 ### zsh-syntax-highlighting
 ```bash
 $(
-# mkdir -p ${HOME}/.zsh/
-# cd  ${HOME}/.zsh/
-cd ~/.oh-my-zsh/custom/plugins/
+zsh_custom="${ZSH_CUSTOM:-~/.oh-my-zsh/custom}"
+cd $zsh_custom/plugins/
+
 git clone --depth 1 ${gh_proxy}https://github.com/zsh-users/zsh-syntax-highlighting
+rm -rf ./zsh-syntax-highlighting/.git 
 )
 
 ```
 
 ### fzf
+
+exec follow script and enable fzf plugin in oh-my-zsh
 ```bash
 repo="https://github.com/junegunn/fzf.git"
-git clone --depth 1 "${gh_proxy}${repo}" ~/.oh-my-zsh/custom/plugins/fzf
+git clone --depth 1 "${gh_proxy}${repo}" ~/.local/share/fzf
 # exec ~/zsh/fzf/./install or script as follows
-~/.oh-my-zsh/custom/plugins/fzf/install --bin
-cat << 'EOF' > ~/.fzf.zsh
-# Setup fzf
-# ---------
-if [[ ! "$PATH" == */Users/dingtianwei/.zsh/fzf/bin* ]]; then
-  PATH="${PATH:+${PATH}:}/Users/dingtianwei/.oh-my-zsh/custom/plugins/fzf/bin"
-fi
-source <(fzf --zsh)
-EOF
+~/.local/share/fzf/install --bin
 
+#cat << 'EOF' > ~/.fzf.zsh
+## Setup fzf
+## ---------
+#if [[ ! "$PATH" == */Users/dingtianwei/.zsh/fzf/bin* ]]; then
+#  PATH="${PATH:+${PATH}:}/Users/dingtianwei/.oh-my-zsh/custom/plugins/fzf/bin"
+#fi
+#source <(fzf --zsh)
+#EOF
 ```
 
 ###  auto-jump
