@@ -19,6 +19,7 @@ unset script_file
 alias tmp="cd ${HOME}/tmp"
 alias t="cd ${HOME}/tmp"
 alias lt='lsof -n -P -i TCP -s TCP:LISTEN'
+alias omt="cd \${OMT}"
 
 if command trash > /dev/null 2>&1; then
   alias rm='trash -vF'
