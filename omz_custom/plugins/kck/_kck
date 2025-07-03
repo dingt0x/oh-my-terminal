@@ -1,4 +1,5 @@
 #compdef kck
+compdef _kck kck
 
 _kck() {
     local -a subcommands args
