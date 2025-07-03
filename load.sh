@@ -32,14 +32,30 @@ unset load_files
 
 
 #load rc.d and function.d files
-for rcfile in "${OMT}/function.d"/* "${OMT}/rc.d"/*; do
+
+if [ -d "${OMT}/function.d" ] ; then
+    for rcfile in "${OMT}/function.d"/*; do
     if { [ "${rcfile: -3}" = ".rc" ] ||  [ "${rcfile: -2}" = "sh" ]; } \
       && [ -s "$rcfile" ]  ; then
       # shellcheck source=/dev/null
       . "${rcfile}"
     fi
-done
-unset rcfile
+    done
+    unset rcfile
+fi
+
+
+if [ -d "${OMT}/rc.d" ] ; then
+    for rcfile in  "${OMT}/rc.d"/*; do
+    if { [ "${rcfile: -3}" = ".rc" ] ||  [ "${rcfile: -2}" = "sh" ]; } \
+      && [ -s "$rcfile" ]  ; then
+      # shellcheck source=/dev/null
+      . "${rcfile}"
+    fi
+    done
+    unset rcfile
+fi
+
 
 
 for entry_file in "${OMT}/entry"/*; do
