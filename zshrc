@@ -15,7 +15,14 @@ export ZSH_THEME=robbyrussell
 
 
 # shellcheck disable=SC2034
-plugins=(git terragrunt terraform autojump fzf zsh-autosuggestions history-substring-search zsh-syntax-highlighting 1password vagrant)
+plugins=(git)
+plugins=($plugins zsh-autosuggestions history-substring-search zsh-syntax-highlighting)
+plugins=($plugins "fzf")
+plugins=($plugins "autojump")
+plugins=($plugins "terraform")
+plugins=($plugins "terragrunt")
+plugins=($plugins "kck")
+plugins=($plugins "1password" "vagrant")
 
 if [ ! -f "$ZSH/oh-my-zsh.sh" ]; then
     echo "oh my zsh Not found"
