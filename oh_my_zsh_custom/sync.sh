@@ -24,3 +24,28 @@ for theme_file in "${custom_cwd}/themes"/*; do
         cp -f "$theme_file" "${ZSH_CUSTOM}/themes/${theme_name}"
     fi
 done
+
+for plugin_dir in "${custom_cwd}/plugins"/*; do
+    plugin=$(basename "$plugin_dir")
+    dst="${ZSH_CUSTOM}/plugins/${plugin}"
+
+    if [ -e "$dst" ]; then
+        rm -rf "$dst"
+    fi
+
+    cp -r "$plugin_dir" "$dst"
+
+    echo "Sync $plugin_dir"
+done
+
+#if [ -d "${custom_cwd}/lib" ]; then
+#    dst="$ZSH_CUSTOM/lib"
+#    if [ -e  "$dst" ]; then rm -rf "$dst" ;fi
+#    cp -r "${custom_cwd}/lib" "$ZSH_CUSTOM/lib"
+#    echo "Sync ${custom_cwd}/lib"
+#fi
+
+
+for rc_file in "${custom_cwd}"/*.zsh; do
+    cp "${rc_file}" "$ZSH_CUSTOM/"
+done

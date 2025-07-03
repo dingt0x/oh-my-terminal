@@ -1,0 +1,98 @@
+#compdef terragrunt
+compdef _terragrunt terragrunt
+
+(( ${+functions[_terragrunt_commands]} )) || _terragrunt_commands() {
+  local -a _terragrunt_cmds
+  _terragrunt_cmds=(
+    'apply:Run `terraform apply` with Terragrunt config'
+    'plan:Run `terraform plan` with Terragrunt config'
+    'destroy:Run `terraform destroy` with Terragrunt config'
+    'init:Run `terraform init` with Terragrunt config'
+    'validate:Run `terraform validate` with Terragrunt config'
+    'output:Run `terraform output` with Terragrunt config'
+    'state:Advanced state management (e.g., `terragrunt state list`)'
+    'run-all:Run command across multiple modules'
+    'graph-dependencies:Graph module dependencies'
+    'hclfmt:Recursively format HCL files'
+    'aws-provider-patch:Patch AWS provider to use assumed role'
+    'render-json:Render Terragrunt config to JSON'
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands 'terragrunt commands' _terragrunt_cmds
+    return
+  fi
+
+  local curcontext="${curcontext}"
+  cmd="${${_terragrunt_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:terragrunt-${cmd}:"
+
+  if (( ${+functions[_terragrunt_$cmd]} )); then
+    "_terragrunt_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+### Terragrunt 特有命令补全
+(( ${+functions[_terragrunt_run-all]} )) || _terragrunt_run-all() {
+  _arguments \
+    '--terragrunt-include-dir[Path to include directories]:dir:_files -/' \
+    '--terragrunt-exclude-dir[Path to exclude directories]:dir:_files -/' \
+    '--terragrunt-parallelism[Max parallelism for run-all]:num:' \
+    '*::terragrunt run-all subcommand:_terragrunt_commands'
+}
+
+(( ${+functions[_terragrunt_graph-dependencies]} )) || _terragrunt_graph-dependencies() {
+  _arguments \
+    '--terragrunt-include-dir[Path to include directories]:dir:_files -/' \
+    '--terragrunt-exclude-dir[Path to exclude directories]:dir:_files -/' \
+    '--terragrunt-output[Output file path]:file:_files'
+}
+
+### Terraform 命令的 Terragrunt 封装补全
+(( ${+functions[_terragrunt_apply]} )) || _terragrunt_apply() {
+  _arguments \
+    '--terragrunt-config[Path to Terragrunt config file]:file:_files -g "*.hcl"' \
+    '--terragrunt-tfpath[Path to Terraform binary]:file:_files -/' \
+    '--terragrunt-working-dir[Set working directory]:dir:_files -/' \
+    '--terragrunt-source[Override source URL for modules]:url:' \
+    '--terragrunt-ignore-dependency-errors[Continue even if dependencies fail]' \
+    '--terragrunt-iam-role[Assume this IAM role]:arn:' \
+    '*:terraform apply args:_terraform_apply'  # 复用 Terraform 的 apply 补全
+}
+
+### 其他 Terraform 子命令补全（复用 Terraform 的逻辑）
+for cmd in plan destroy init validate output state; do
+  (( ${+functions[_terragrunt_$cmd]} )) || eval "
+    _terragrunt_$cmd() {
+      _arguments \
+        '--terragrunt-config[Path to Terragrunt config file]:file:_files -g \"*.hcl\"' \
+        '--terragrunt-working-dir[Set working directory]:dir:_files -/' \
+        '*:terraform $cmd args:_terraform_$cmd'
+    }
+  "
+done
+
+### 动态补全 Terragrunt 模块路径
+__terragrunt_modules() {
+  local -a modules
+  modules=($(find . -name 'terragrunt.hcl' -exec dirname {} \; 2>/dev/null))
+  compadd "$@" - "${modules[@]##*/}"
+}
+
+### 主函数
+_terragrunt() {
+  _arguments \
+    '--version[Show version]' \
+    '--help[Show help]' \
+    '--terragrunt-config[Path to Terragrunt config file]:file:_files -g "*.hcl"' \
+    '--terragrunt-tfpath[Path to Terraform binary]:file:_files -/' \
+    '--terragrunt-working-dir[Set working directory]:dir:_files -/' \
+    '--terragrunt-log-level[Set log level]:level:(panic fatal error warn info debug trace)' \
+    '--terragrunt-debug[Enable debug mode]' \
+    '*::terragrunt command:_terragrunt_commands'
+}
+
+if [ "${funcstack[1]}" = '_terragrunt' ]; then
+  _terragrunt
+fi
