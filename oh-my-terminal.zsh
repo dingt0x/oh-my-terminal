@@ -12,7 +12,7 @@ fi
 
 
 load_files="
-${OMT}/load/_load_path.sh
+${OMT}/lib/load/_load_path.sh
 "
 
 
@@ -33,8 +33,8 @@ unset load_files
 
 #load rc.d and function.d files
 
-if [ -d "${OMT}/function.d" ] ; then
-    for rcfile in "${OMT}/function.d"/*; do
+if [ -d "${OMT}/lib/function.d" ] ; then
+    for rcfile in "${OMT}/lib/function.d"/*; do
     if { [ "${rcfile: -3}" = ".rc" ] ||  [ "${rcfile: -2}" = "sh" ]; } \
       && [ -s "$rcfile" ]  ; then
       # shellcheck source=/dev/null
@@ -45,8 +45,8 @@ if [ -d "${OMT}/function.d" ] ; then
 fi
 
 
-if [ -d "${OMT}/rc.d" ] ; then
-    for rcfile in  "${OMT}/rc.d"/*; do
+if [ -d "${OMT}/lib/rc.d" ] ; then
+    for rcfile in  "${OMT}/lib/rc.d"/*; do
     if { [ "${rcfile: -3}" = ".rc" ] ||  [ "${rcfile: -2}" = "sh" ]; } \
       && [ -s "$rcfile" ]  ; then
       # shellcheck source=/dev/null
@@ -58,7 +58,7 @@ fi
 
 
 # TODO 配置
-for entry_file in "${OMT}/entry"/*; do
+for entry_file in "${OMT}/lib/entry"/*; do
     if [ "${entry_file: -3}" = ".sh" ] && [ -s "$entry_file" ]  ; then
        bash "${entry_file}"
     fi

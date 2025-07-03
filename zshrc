@@ -1,21 +1,21 @@
-export ZSH="$HOME/.oh-my-zsh"
-export ZSH_CUSTOM="${HOME}/.oh-my-zsh/custom"
-export ZSH_THEME=robbyrussell
-
 export PROXY_IP="127.0.0.1"
-export GO_VERSION=1.20.14
+
 export GO111MODULE=auto
-export DISABLE_MAGIC_FUNCTIONS=true
-export CASE_SENSITIVE="true"
+export GO_VERSION=1.20.14
+export NODE_VERSION=22.16.0
 
+export ZSH="$HOME/.oh-my-zsh"
 export OMT="${HOME}/Projects/dingtianwei/oh-my-terminal"
+export ZSH_CUSTOM="${OMT}/omz_custom"
 
-# autoload -Uz compinit
-# compinit
+zstyle ':omz:update' mode disabled
+export DISABLE_MAGIC_FUNCTIONS=true
+export ZSH_THEME=robbyrussell
+# export CASE_SENSITIVE="true"
+
 
 # shellcheck disable=SC2034
-plugins=(git iterm2 autojump fzf zsh-autosuggestions history-substring-search zsh-syntax-highlighting 1password vagrant)
-export FZF_BASE="${ZSH_CUSTOM}/plugins/fzf"
+plugins=(git terragrunt terraform autojump fzf zsh-autosuggestions history-substring-search zsh-syntax-highlighting 1password vagrant)
 
 if [ ! -f "$ZSH/oh-my-zsh.sh" ]; then
     echo "oh my zsh Not found"
@@ -24,4 +24,4 @@ else
 fi
 
 
-[ -f "${OMT}/load.sh" ] && source "${OMT}/load.sh"
+[ -f "${OMT}/oh-my-zsh.sh" ] && source "${OMT}/oh-my-zsh.sh"

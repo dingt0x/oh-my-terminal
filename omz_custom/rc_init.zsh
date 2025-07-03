@@ -3,7 +3,7 @@
 
 PATH="${HOME}/.local/bin:${PATH}"
 
-DINGT0X_SCRIPT_D="${OMT}/script.d"
+DINGT0X_SCRIPT_D="${OMT}/lib/script.d"
 if [ -d "$DINGT0X_SCRIPT_D" ]; then
     for script_file in $(find "$DINGT0X_SCRIPT_D" -type f -name '*.sh');do
 #        filename_with_ext=$(basename "$dingt0x_script")  # => "example.txt"
