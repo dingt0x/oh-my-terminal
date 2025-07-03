@@ -13,16 +13,16 @@ is_plugin() {
   local base_dir=$1
   local name=$2
   builtin test -f $base_dir/plugins/$name/$name.plugin.zsh \
-    || builtin test -f $base_dir/plugt ins/$name/_$name
+    || builtin test -f $base_dir/plugtins/$name/_$name
 }
 
-for plugin in "${plugins[@]}"; do
+for plugin in "${omt_plugins[@]}"; do
   if is_plugin "$OMT_CUSTOM" "$plugin"; then
     fpath=("$OMT_CUSTOM/plugins/$plugin" $fpath)
   elif is_plugin "$OMT" "$plugin"; then
     fpath=("$OMT/plugins/$plugin" $fpath)
   else
-    echo "[oh-my-zsh] plugin '$plugin' not found"
+    echo "[oh-my-terminal] plugin '$plugin' not found"
   fi
 done
 
@@ -70,7 +70,7 @@ if command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
   command rm -rf "$ZSH_COMPDUMP.zwc.old" "${ZSH_COMPDUMP}.lock"
 fi
 
-for plugin in "${plugins[@]}"; do
+for plugin in "${omt_plugins[@]}"; do
   if is_plugin "$OMT_CUSTOM" "$plugin"; then
      source "$OMT_CUSTOM/plugins/$plugin/${plugin}.plugin.zsh"
   elif is_plugin "$OMT" "$plugin"; then
@@ -86,7 +86,7 @@ is_theme() {
   builtin test -f "$base_dir/$name.zsh-theme"
 }
 
-OMT_THEME=${ZSH_THEME:-"dingt0xavit"}
+OMT_THEME=${OMT_THEME:-"dingt0xavit"}
 
 if [[ -n "$OMT_THEME" ]]; then
   if is_theme "$OMT_CUSTOM" "$OMT_THEME"; then
