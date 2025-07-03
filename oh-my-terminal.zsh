@@ -10,13 +10,12 @@ if [ -z "$OMT" ]; then
     return
 fi
 
-[ -f "$OMT/lib/oh-my-zsh.zsh" ] &&  source "$OMT/lib/oh-my-zsh.zsh"
-
-
 
 load_files="
 ${OMT}/load/_load_path.sh
 "
+
+
 echo "$load_files" | while read -r load_file; do
     if [ "${load_file:0:1}" = "" ] || [ "${load_file:0:1}" = "#" ]; then
          continue
@@ -33,22 +32,35 @@ unset load_files
 
 
 #load rc.d and function.d files
-for rcfile in "${OMT}/function.d"/* "${OMT}/rc.d"/* ; do
-    if { [ "${rcfile: -3}" = ".rc" ] ||  [ "${rcfile: -3}" = ".sh" ] || [ "${rcfile: -4}" = ".zsh" ] ; } \
+
+if [ -d "${OMT}/function.d" ] ; then
+    for rcfile in "${OMT}/function.d"/*; do
+    if { [ "${rcfile: -3}" = ".rc" ] ||  [ "${rcfile: -2}" = "sh" ]; } \
       && [ -s "$rcfile" ]  ; then
       # shellcheck source=/dev/null
       . "${rcfile}"
     fi
-done
-unset rcfile
+    done
+    unset rcfile
+fi
 
 
+if [ -d "${OMT}/rc.d" ] ; then
+    for rcfile in  "${OMT}/rc.d"/*; do
+    if { [ "${rcfile: -3}" = ".rc" ] ||  [ "${rcfile: -2}" = "sh" ]; } \
+      && [ -s "$rcfile" ]  ; then
+      # shellcheck source=/dev/null
+      . "${rcfile}"
+    fi
+    done
+    unset rcfile
+fi
 
+
+# TODO 配置
 for entry_file in "${OMT}/entry"/*; do
     if [ "${entry_file: -3}" = ".sh" ] && [ -s "$entry_file" ]  ; then
        bash "${entry_file}"
     fi
 done
-
 unset entry_file
-

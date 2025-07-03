@@ -26,6 +26,7 @@ fi
 
 
 
+export LSCOLORS="Exfxcxdxbxegedabagacad"
 
 
 
