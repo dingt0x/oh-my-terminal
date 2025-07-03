@@ -1,0 +1,40 @@
+#compdef kck
+
+_kck() {
+    local -a subcommands args
+    local kube_dir="${HOME}/.kube"
+
+    subcommands=(
+        '(-l --list)'{-l,--list}'[列出所有可用配置]'
+        '(-c --current)'{-c,--current}'[显示当前激活的配置]'
+        '(-d --set-default)'{-d,--set-default}'[切换并设置为默认配置]:配置名:_kck_configs'
+        '(-h --help)'{-h,--help}'[显示帮助信息]'
+    )
+
+    _arguments -C \
+        "$subcommands[@]" \
+        '*::配置名:_kck_configs' \
+        && return 0
+
+    return 1
+}
+
+_kck_configs() {
+    local -a configs
+    local kube_dir="${HOME}/.kube"
+
+    # 查找所有 .kubeconfig 文件
+    for file in "$kube_dir"/*.kubeconfig; do
+        [ -f "$file" ] || continue
+        configs+=( $(basename "$file" .kubeconfig) )
+    done
+
+    # 如果 config 文件存在且不是符号链接，也添加进来
+    if [ -f "$kube_dir/config" ] && [ ! -L "$kube_dir/config" ]; then
+        configs+=( config )
+    fi
+
+    _describe 'configurations' configs
+}
+
+_kck "$@"

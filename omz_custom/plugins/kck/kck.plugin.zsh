@@ -55,7 +55,7 @@ EOF
 # 获取当前激活的 kubeconfig 名称
 _kck_get_current_name() {
     local kubeconfig="${KUBECONFIG:-${HOME}/.kube/config}"
-    
+
     if [ ! -e "$kubeconfig" ]; then
         if [ "$1" = "--log" ]; then
             echo
@@ -64,7 +64,7 @@ _kck_get_current_name() {
         fi
         return
     fi
-    
+
     # 如果是符号链接，获取链接目标的文件名
 
     if [ -L "$kubeconfig" ]; then
@@ -97,19 +97,19 @@ _kck_get_max_name_length() {
     local max_length=0
     local name
     local length
-    
+
     # 查找所有 kubeconfig 文件
     for file in "$kube_dir"/*.kubeconfig "$kube_dir"/config; do
         [ -f "$file" ] || continue
 
         name="$(basename "$file" .kubeconfig)"
         length="${#name}"
-        
+
         if (( length > max_length )); then
             max_length=$length
         fi
     done
-    
+
     echo "$max_length"
 }
 
@@ -117,19 +117,19 @@ _kck_get_max_name_length() {
 _kck_list() {
     local kube_dir="${HOME}/.kube"
     local kubeconfig_default="${kube_dir}/config"
-    
+
     # 检查 .kube 目录是否存在
     if [ ! -d "$kube_dir" ]; then
         echo "错误: $kube_dir 目录不存在" >&2
         return 1
     fi
-    
+
     # 获取当前激活的配置名称（通过 KUBECONFIG 或默认配置）
     local current_name
     if ! current_name=$(_kck_get_current_name); then
         return 1
     fi
-    
+
     # 获取 config 软链接指向的配置名称
     local config_link_name
     config_link_name=$(_kck_get_config_link_name)
@@ -140,27 +140,27 @@ _kck_list() {
 
     # 收集所有配置文件
     local configs=()
-    
+
     # 添加 .kubeconfig 文件
     for file in "$kube_dir"/*.kubeconfig; do
         [ -f "$file" ] && configs+=("$(basename "$file")")
     done
-    
+
     # 如果 config 文件存在且不是符号链接，也添加进来
     if [ -f "$kubeconfig_default" ] && [ ! -L "$kubeconfig_default" ]; then
         configs+=("config")
     fi
-    
+
     # 检查是否找到配置文件
     if (( ${#configs[@]} == 0 )); then
         echo "未找到任何 kubeconfig 文件" >&2
         return 1
     fi
-    
+
     # 输出配置列表
     echo "可用的 Kubernetes 配置:"
     echo
-    
+
     for config in "${configs[@]}"; do
         local name
         local formatted_name
@@ -168,23 +168,23 @@ _kck_list() {
         name=$(basename "$config" .kubeconfig)
         formatted_name=$(printf "%-${max_length}s" "$name")
         file_path="${kube_dir}/${config}"
-        
+
         # 判断前缀和后缀
         local prefix="  "
         local suffix=""
         local use_color=false
-        
+
         # > 表示当前激活的配置
         if [ "$current_name" = "$name" ]; then
             prefix="> "
             use_color=true
         fi
-        
+
         # * 表示 config 软链接指向的配置
         if [ -n "$config_link_name" ] && [ "$config_link_name" = "$name" ]; then
             suffix=" *"
         fi
-        
+
         # 输出
         if [ "$use_color" = true ]; then
             _kck_log_info "${prefix}${formatted_name} ${file_path}${suffix}"
@@ -220,15 +220,15 @@ _kck_switch() {
         _kck_help
         return 1
     fi
-    
+
     # 检查是否需要设置默认配置
     if [ "$2" = "--set-default" ]; then
         set_default=true
     fi
-    
+
     # 查找目标配置文件
     local target_file=""
-    
+
     if [ "$target_name" = "config" ] &&  [ -f "${kube_dir}/config.kubeconfig" ]; then
         target_file="${kube_dir}/config.kubeconfig"
     elif [ -f "${kube_dir}/${target_name}.kubeconfig" ]; then
@@ -240,11 +240,11 @@ _kck_switch() {
         echo "使用 kck_list 查看可用配置" >&2
         return 1
     fi
-    
+
     # 设置环境变量
     export KUBECONFIG="$target_file"
     _kck_log_info "已设置环境变量 KUBECONFIG: ${target_file}"
-    
+
     # 如果需要，同时修改默认软链接
     if [ "$set_default" = true ]; then
         if [ ! "$target_file" = "$kubeconfig_default" ]; then
@@ -265,12 +265,12 @@ _kck_switch() {
 # 显示当前激活的配置
 _kck_current() {
     local kubeconfig="${KUBECONFIG:-${HOME}/.kube/config}"
-    
+
     if [ ! -e "$kubeconfig" ]; then
         _kck_log_error "错误: 当前配置文件 $kubeconfig 不存在" >&2
         return 1
     fi
-    
+
     # 获取配置名称
     local name
     if [ -L "$kubeconfig" ]; then
@@ -280,7 +280,7 @@ _kck_current() {
     else
         name=$(basename "$kubeconfig" .kubeconfig)
     fi
-    
+
     # 显示完整信息：名称和完整路径
     _kck_log_info "${name} ${kubeconfig}"
 }
@@ -289,13 +289,13 @@ _kck_current() {
 kck() {
     local first_arg="$1"
     local second_arg="$2"
-    
+
     # 无参数：显示配置列表
     if [ $# -eq 0 ]; then
         _kck_list
         return $?
     fi
-    
+
     # 处理选项参数
     case "$first_arg" in
         --list|-l)
