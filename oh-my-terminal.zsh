@@ -105,7 +105,8 @@ fi
 
 for entry_file in "${OMT}/lib/entry"/*; do
     if [ "${entry_file: -3}" = ".sh" ] && [ -s "$entry_file" ]  ; then
-       bash "${entry_file}" &|
+       # bash "${entry_file}" &|
+       (sh "${entry_file}" &)
     fi
 done
 unset entry_file
