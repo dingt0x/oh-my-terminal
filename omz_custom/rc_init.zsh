@@ -3,11 +3,10 @@
 
 PATH="${HOME}/.local/bin:${PATH}"
 
-DINGT0X_SCRIPT_D="${OMT}/lib/script.d"
-if [ -d "$DINGT0X_SCRIPT_D" ]; then
-    for script_file in $(find "$DINGT0X_SCRIPT_D" -type f -name '*.sh');do
-#        filename_with_ext=$(basename "$dingt0x_script")  # => "example.txt"
-#        filename_without_ext="${filename_with_ext%.*}"
+OMT_SCRIPT_D="${OMT}/lib/script.d"
+if [ -d "$OMT_SCRIPT_D" ]; then
+    for script_file in $(find "$OMT_SCRIPT_D" -type f -name '*.sh');do
+        # TODO refactor with sh syntax
         eval "alias ${script_file:t:r}=${script_file}"
     done
 fi
