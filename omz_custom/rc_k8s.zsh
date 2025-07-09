@@ -18,7 +18,7 @@ alias kc='kubectl calico'
 alias ks='kubectl -n kube-system'
 alias krew='kubectl-krew'
 
-if test "${commands[kubectl]}"; then
+if which kubectl > /dev/null 2>&1; then
   shell_name="$(basename $SHELL)"
   if [ "$shell_name" = "zsh" ]; then
     source <(kubectl completion zsh)
