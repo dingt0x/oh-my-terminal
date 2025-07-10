@@ -6,6 +6,13 @@ if [ -d "${HOME}/miniconda3/bin" ]; then
   fi
 fi
 
+
+if sys_python_path=$(/usr/bin/python3 -m site --user-base 2>/dev/null); then
+    export PATH="${sys_python_path}/bin:${PATH}"
+fi
+
+
+
 # if command -v pyenv 1>/dev/null 2>&1; then
 #   eval "$(pyenv init -)"
 # fi
