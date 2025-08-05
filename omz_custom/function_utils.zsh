@@ -124,3 +124,13 @@ cd2(){
     fi
     return 1
 }
+
+
+lsh(){
+    pattern="${1:-}"
+    if [ -z "$pattern" ]; then
+        grep -hr "^Host " ~/.ssh/config ~/.ssh/config.d/ | awk '{print $2}' | sort -u
+    else
+        grep -hr "^Host " ~/.ssh/config ~/.ssh/config.d/ | awk '{print $2}' | sort -u | grep "${pattern}"
+    fi
+}
